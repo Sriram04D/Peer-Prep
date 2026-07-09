@@ -1,22 +1,57 @@
-# React
+# =========================
+# React Frontend
+# =========================
 peerprep-frontend/node_modules/
 peerprep-frontend/build/
 
-# Backend
-backend/__pycache__/
-*.pyc
-
-# Environment files
-.env
-backend/.env
+# Frontend Environment
 peerprep-frontend/.env
 
+# =========================
+# Backend (Python)
+# =========================
+backend/__pycache__/
+backend/.env
+*.pyc
+*.pyo
+*.pyd
+
+# Python Virtual Environment
+venv/
+.venv/
+env/
+
+# =========================
 # Root
+# =========================
 node_modules/
+.env
 
-# VS Code
+# =========================
+# IDE
+# =========================
 .vscode/
+.idea/
 
-# OS
+# =========================
+# Operating System
+# =========================
 .DS_Store
 Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# MongoDB
+# =========================
+*.wt
+*.lock
+
+# =========================
+# Test Cache
+# =========================
+.pytest_cache/
+.coverage

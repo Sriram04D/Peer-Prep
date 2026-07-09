@@ -2,22 +2,61 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import './Login.css'; 
+import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Firebase Login
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      // Save user to MongoDB
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firebase_uid: user.uid,
+            name: user.displayName || "",
+            email: user.email,
+            photo_url: user.photoURL || ""
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save user");
+      }
+
+      console.log("✅ User saved to MongoDB");
+
       navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid credentials');
-    }
+
+    }catch (err) {
+  console.error(err);
+
+  alert(
+    "Code: " + (err.code || "No code") +
+    "\nMessage: " + (err.message || "No message")
+  );
+}
   };
 
   return (
@@ -34,6 +73,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Enter your password"
@@ -41,14 +81,20 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <div className="login-options">
             <label>
               <input type="checkbox" /> Remember me
             </label>
-            <span className="forgot-pass">Forgot Password?</span>
+
+            <span className="forgot-pass">
+              Forgot Password?
+            </span>
           </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn">
+            Login
+          </button>
         </form>
 
         {error && <p className="error-text">{error}</p>}
@@ -61,12 +107,15 @@ const Login = () => {
         </div>
 
         <p className="signup-link">
-          Don't have an account? <span onClick={() => navigate('/signup')}>Sign up</span>
+          Don't have an account?{" "}
+          <span onClick={() => navigate('/signup')}>
+            Sign up
+          </span>
         </p>
       </div>
 
       <div className="login-right">
-        <img src="/illusion.jpg" alt="Illusion background" />
+        <img src="/illusion.jpg" alt="Background" />
       </div>
     </div>
   );
