@@ -5,7 +5,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow frontend
+    allow_origins=[ "https://peer-prep12-l99oxiuxj-srirams-projects-4a06f33e.vercel.app",],  # Allow frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
