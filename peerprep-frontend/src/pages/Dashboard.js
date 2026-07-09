@@ -57,15 +57,7 @@ const Dashboard = ({ user }) => {
       console.error("Logout failed:", err);
     }
   };
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  };
-
+ 
   const styles = {
     dashboardContainer: {
       display: "flex",
