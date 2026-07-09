@@ -6,7 +6,7 @@ import { signOut } from "firebase/auth";
 
 const Dashboard = ({ user }) => {
   const navigate = useNavigate();
-  const [interviewStatus, setInterviewStatus] = useState(""); // For live status messages
+  const [interviewStatus, setInterviewStatus] = useState("");
 
   const handleMockInterview = () => {
     setInterviewStatus("⌛ Waiting for another user to join...");
@@ -18,29 +18,26 @@ const Dashboard = ({ user }) => {
     };
 
     ws.onmessage = (e) => {
-  try {
-    // Try parsing it as JSON
-    const data = JSON.parse(e.data);
+      try {
+        const data = JSON.parse(e.data);
 
-    if (data.type === "paired") {
-      setInterviewStatus("🎉 Matched with a partner! Redirecting...");
-      navigate("/interview-room");
-    } else {
-      setInterviewStatus(`📡 Status: ${data.message || "Waiting..."}`);
-    }
-  } catch (err) {
-    // If it's not JSON (e.g. plain text like "🎉 You have been paired!")
-    console.warn("Non-JSON message received:", e.data);
-    
-    // Check if it includes "paired" keyword
-    if (e.data.toLowerCase().includes("paired")) {
-      setInterviewStatus("🎉 Matched with a partner! Redirecting...");
-      navigate("/interview-room");
-    } else {
-      setInterviewStatus(`📡 Status: ${e.data}`);
-    }
-  }
-};
+        if (data.type === "paired") {
+          setInterviewStatus("🎉 Matched with a partner! Redirecting...");
+          navigate("/interview-room");
+        } else {
+          setInterviewStatus(`📡 Status: ${data.message || "Waiting..."}`);
+        }
+      } catch (err) {
+        console.warn("Non-JSON message received:", e.data);
+
+        if (e.data.toLowerCase().includes("paired")) {
+          setInterviewStatus("🎉 Matched with a partner! Redirecting...");
+          navigate("/interview-room");
+        } else {
+          setInterviewStatus(`📡 Status: ${e.data}`);
+        }
+      }
+    };
 
     ws.onerror = (error) => {
       console.error("❌ WebSocket error:", error);
@@ -52,6 +49,14 @@ const Dashboard = ({ user }) => {
     };
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
   const handleLogout = async () => {
     try {
       await signOut(auth);
