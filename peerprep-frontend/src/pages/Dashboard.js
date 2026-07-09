@@ -57,7 +57,7 @@ const Dashboard = ({ user }) => {
       console.error("Logout failed:", err);
     }
   };
- 
+
   const styles = {
     dashboardContainer: {
       display: "flex",
@@ -108,26 +108,32 @@ const Dashboard = ({ user }) => {
 
   return (
     <div style={styles.dashboardContainer}>
-      <Sidebar user={user} />
+      <Sidebar
+        user={user}
+        onLogout={handleLogout}
+      />
 
       <div style={styles.mainContent}>
         <h1>Welcome, {user?.displayName || "User"} 👋</h1>
 
         <div style={styles.mainBox}>
-          {/* Coding Mock Test Section */}
           <div style={styles.mockTestBox}>
             <h3>🧪 Take Coding Mock Test</h3>
             <p>Practice real LeetCode-style questions with a timer.</p>
             <button style={styles.btn}>Start Test</button>
           </div>
 
-          {/* Mock Interview Section */}
           <div style={styles.mockInterviewBox}>
             <h3>🎤 Mock Interview</h3>
             <p>Pair up with other students and simulate real interviews.</p>
-            <button style={styles.btn} onClick={handleMockInterview}>
+
+            <button
+              style={styles.btn}
+              onClick={handleMockInterview}
+            >
               Start Interview
             </button>
+
             <p style={styles.statusText}>{interviewStatus}</p>
           </div>
         </div>
