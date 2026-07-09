@@ -1,0 +1,22 @@
+# React
+peerprep-frontend/node_modules/
+peerprep-frontend/build/
+
+# Backend
+backend/__pycache__/
+*.pyc
+
+# Environment files
+.env
+backend/.env
+peerprep-frontend/.env
+
+# Root
+node_modules/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
